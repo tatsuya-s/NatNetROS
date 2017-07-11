@@ -3,9 +3,7 @@
 #include <NatNetLinux/CommandListener.h>
 #include <NatNetLinux/FrameListener.h>
 #include "ros/ros.h"
-#include "std_msgs/String.h"
 #include "std_msgs/UInt16.h"
-#include "tf_conversions/tf_eigen.h"
 #include "natnet_ros/RigidBody.h"
 #include "natnet_ros/Marker.h"
 
@@ -129,9 +127,9 @@ void NatNetROS::MainLoop() {
 int main(int argc, char **argv) {
     ros::init(argc, argv, "NatNetROS_node");
     
-    NatNetROS motive;
+    NatNetROS natnet;
 
-    motive.MainLoop();
+    natnet.MainLoop();
 
     return 0;
 }

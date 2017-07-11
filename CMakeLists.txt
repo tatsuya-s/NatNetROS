@@ -5,8 +5,6 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   roscpp
   std_msgs
-  tf
-  tf_conversions
   message_generation
 )
 
@@ -18,14 +16,14 @@ add_message_files(
 
 generate_messages(
   DEPENDENCIES
-  std_msgs
   geometry_msgs
+  std_msgs
 )
 
 catkin_package(
 #  INCLUDE_DIRS include
   LIBRARIES natnet_ros
-  CATKIN_DEPENDS message_runtime geometry_msgs roscpp std_msgs tf tf_conversions
+  CATKIN_DEPENDS message_runtime geometry_msgs roscpp std_msgs
 #   DEPENDS system_lib
 )
 
