@@ -7,9 +7,16 @@
 ## Installation
 
     $ cd ~/catkin_ws/src
-    $ git clone https://github.com/tatsuya-s/NatNetROS
+    $ git clone https://github.com/tatsuya-s/natnet_ros
     $ cd ~/catkin_ws/
     $ catkin build
+
+## Setting
+
+### Motive
+
+- Broadcast Frame Data set to true
+- Local Interface set to the ip address of your PC (It is server address)
 
 ## Usage
 
