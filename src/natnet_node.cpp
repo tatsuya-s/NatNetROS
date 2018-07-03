@@ -13,10 +13,10 @@ class NatNetROS
     public:
         NatNetROS();
         ~NatNetROS();
-        void MainLoop();
+        void mainLoop();
 
     private:
-        void PublishData(FrameListener& frameListener);
+        void publishData(FrameListener &frameListener);
         ros::NodeHandle nh, private_nh;
         ros::Publisher body_pub;
         ros::Publisher marker_pub;
@@ -46,7 +46,7 @@ NatNetROS::~NatNetROS()
 {
 }
 
-void NatNetROS::PublishData(FrameListener& frameListener) 
+void NatNetROS::publishData(FrameListener &frameListener) 
 {
     bool valid;
     MocapFrame frame;
@@ -59,7 +59,7 @@ void NatNetROS::PublishData(FrameListener& frameListener)
 
     while (ros::ok()) 
     {
-        // Try to get a new frame from the listener.
+        // Try to get a new frame from the listener
         MocapFrame frame(frameListener.pop(&valid).first);
         
         if (valid) 
@@ -116,7 +116,7 @@ void NatNetROS::PublishData(FrameListener& frameListener)
     }
 }
 
-void NatNetROS::MainLoop() 
+void NatNetROS::mainLoop() 
 {
     struct sockaddr_in command_server = NatNet::createAddress(this->server_address, NatNet::commandPort);
     int command_socket, data_socket;
@@ -134,7 +134,7 @@ void NatNetROS::MainLoop()
     FrameListener frame_listener(data_socket, natnet_major, natnet_minor);
     frame_listener.start();
     
-    this->PublishData(frame_listener);
+    this->publishData(frame_listener);
 
     frame_listener.stop();
     command_listener.stop();
@@ -151,7 +151,7 @@ int main(int argc, char **argv)
     
     NatNetROS natnet;
 
-    natnet.MainLoop();
+    natnet.mainLoop();
 
     return 0;
 }
