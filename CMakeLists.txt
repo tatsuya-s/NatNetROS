@@ -1,29 +1,32 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(natnet_ros)
 
+add_compile_options(-std=c++11)
+
 find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   roscpp
   std_msgs
+  tf2_ros
   message_generation
 )
 
 add_message_files(
   FILES
-  RigidBody.msg
-  Marker.msg
+    RigidBody.msg
+    Marker.msg
 )
 
 generate_messages(
   DEPENDENCIES
-  geometry_msgs
-  std_msgs
+    geometry_msgs
+    std_msgs
 )
 
 catkin_package(
 #  INCLUDE_DIRS include
   LIBRARIES natnet_ros
-  CATKIN_DEPENDS message_runtime geometry_msgs roscpp std_msgs
+  CATKIN_DEPENDS message_runtime geometry_msgs roscpp std_msgs tf2_ros
 #   DEPENDS system_lib
 )
 

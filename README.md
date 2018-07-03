@@ -23,7 +23,6 @@ Or write a launch file
     <rosparam subst_value="true">
       local_address: "192.168.1.100"
       server_address: "192.168.1.101"
-      z_up: true
     </rosparam>
   </node>
 
