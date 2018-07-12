@@ -1,7 +1,7 @@
 <launch>
 
-  <arg name="local_address" default="192.168.1.2"/>
-  <arg name="server_address" default="192.168.1.1"/>
+  <arg name="local_address" default="172.31.1.2"/>
+  <arg name="server_address" default="172.31.1.1"/>
 
   <node pkg="natnet_ros" type="natnet_node" name="natnet_node" output="screen">
     <rosparam subst_value="true">
@@ -10,4 +10,6 @@
     </rosparam>
   </node>
 
+  <node pkg="natnet_ros" type="natnet_viz_node" name="natnet_viz_node" output="screen"/>
+  <node pkg="tf2_ros" type="static_transform_publisher" name="optitrack_broadcaster" args="0 0 0 3.1416 0 0 world optitrack" />
 </launch>

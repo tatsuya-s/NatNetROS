@@ -4,11 +4,11 @@ project(natnet_ros)
 add_compile_options(-std=c++11)
 
 find_package(catkin REQUIRED COMPONENTS
+  message_generation
   geometry_msgs
   roscpp
   std_msgs
   tf2_ros
-  message_generation
 )
 
 add_message_files(
@@ -38,3 +38,7 @@ include_directories(
 add_executable(natnet_node src/natnet_node.cpp)
 target_link_libraries(natnet_node ${catkin_LIBRARIES})
 add_dependencies(natnet_node natnet_ros_generate_messages_cpp)
+
+add_executable(natnet_viz_node src/viz_node.cpp)
+target_link_libraries(natnet_viz_node ${catkin_LIBRARIES})
+add_dependencies(natnet_viz_node natnet_ros_generate_messages_cpp)
