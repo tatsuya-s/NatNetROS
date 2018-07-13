@@ -24,16 +24,19 @@ class NatNetROS
         std::string parent_frame_id;
         uint32_t local_address;
         uint32_t server_address;
+        bool y_up;
 };
 
 NatNetROS::NatNetROS() :
     private_nh("~"), 
-    parent_frame_id("optitrack")
+    parent_frame_id("optitrack"), 
+    y_up(false)
 {
     body_pub = this->nh.advertise<natnet_ros::RigidBody>("NatNet/RigidBody", 100);
     marker_pub = this->nh.advertise<natnet_ros::Marker>("NatNet/Marker", 100);
 
     this->private_nh.getParam("parent_frame_id", this->parent_frame_id);
+    this->private_nh.getParam("y_up", this->y_up);
 
     std::string local_ip, server_ip;
     this->private_nh.getParam("local_address", local_ip);
@@ -75,34 +78,40 @@ void NatNetROS::publishData(FrameListener &frameListener)
                 const Quaternion4f &body_orientation = body_pose.orientation();
 
                 id.data = body_id;
-                pose_msg.position.x = body_location.x;
-                pose_msg.position.y = -body_location.z;
-                pose_msg.position.z = body_location.y;
-                pose_msg.orientation.x = body_orientation.qx;
-                pose_msg.orientation.y = -body_orientation.qz;
-                pose_msg.orientation.z = body_orientation.qy;
-                pose_msg.orientation.w = body_orientation.qw;
-                body_msg.id_array.push_back(id);
-                body_msg.pose_array.push_back(pose_msg);
-
+                transform_stamped.header.stamp = now_time;
                 transform_stamped.header.frame_id = this->parent_frame_id;
                 transform_stamped.child_frame_id = "body" + std::to_string(body_id);
-                transform_stamped.transform.translation.x = body_location.x;
-                transform_stamped.transform.translation.y = -body_location.z;
-                transform_stamped.transform.translation.z = body_location.y;
-                transform_stamped.transform.rotation.x = body_orientation.qx;
-                transform_stamped.transform.rotation.y = -body_orientation.qz;
-                transform_stamped.transform.rotation.z = body_orientation.qy;
-                transform_stamped.transform.rotation.w = body_orientation.qw;
-                transform_stamped.header.stamp = now_time;
 
+                pose_msg.position.x = transform_stamped.transform.translation.x = body_location.x;
+                pose_msg.position.y = transform_stamped.transform.translation.y = body_location.y;
+                pose_msg.position.z = transform_stamped.transform.translation.z = body_location.z;
+                pose_msg.orientation.x = transform_stamped.transform.rotation.x = body_orientation.qx;
+                pose_msg.orientation.y = transform_stamped.transform.rotation.y = body_orientation.qy;
+                pose_msg.orientation.z = transform_stamped.transform.rotation.z = body_orientation.qz;
+                pose_msg.orientation.w = transform_stamped.transform.rotation.w = body_orientation.qw;
+
+                if (this->y_up) 
+                {
+                    pose_msg.position.y = transform_stamped.transform.translation.y = -body_location.z;
+                    pose_msg.position.z = transform_stamped.transform.translation.z = body_location.y;
+                    pose_msg.orientation.y = transform_stamped.transform.rotation.y = -body_orientation.qz;
+                    pose_msg.orientation.z = transform_stamped.transform.rotation.z = body_orientation.qy;
+                }
+
+                body_msg.id_array.push_back(id);
+                body_msg.pose_array.push_back(pose_msg);
                 this->tf_broadcaster.sendTransform(transform_stamped);
             }
             for (auto &marker_point : markers_point) 
             {
                 point_msg.x = marker_point.x;
-                point_msg.y = -marker_point.z;
+                point_msg.y = marker_point.z;
                 point_msg.z = marker_point.y;
+                if (this->y_up) 
+                {
+                    point_msg.y = -marker_point.z;
+                    point_msg.z = marker_point.y;
+                }
                 marker_msg.point_array.push_back(point_msg);
             }
 

@@ -1,0 +1,14 @@
+<launch>
+  <arg name="local_address" default="160.69.69.100"/>
+  <arg name="server_address" default="160.69.69.101"/>
+  <arg name="y_up" default="true"/>
+
+  <node pkg="natnet_ros" type="natnet_node" name="natnet_node" output="screen">
+    <param name="local_address" value="$(arg local_address)"/>
+    <param name="server_address" value="$(arg server_address)"/>
+    <param name="y_up" value="$(arg y_up)"/>
+  </node>
+
+  <node pkg="natnet_ros" type="natnet_viz_node" name="natnet_viz_node" output="screen"/>
+  <node pkg="tf2_ros" type="static_transform_publisher" name="optitrack_broadcaster" args="0 0 0 3.14 0 0 world optitrack" />
+</launch>
