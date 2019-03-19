@@ -24,21 +24,41 @@ generate_messages(
 )
 
 catkin_package(
-#  INCLUDE_DIRS include
-  LIBRARIES natnet_ros
-  CATKIN_DEPENDS message_runtime geometry_msgs roscpp std_msgs tf2_ros
-#   DEPENDS system_lib
+  CATKIN_DEPENDS
+    message_runtime
+    geometry_msgs
+    roscpp
+    std_msgs
+    tf2_ros
 )
 
 include_directories(
   include
-  ${catkin_INCLUDE_DIRS}
+    ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(natnet_node src/natnet_node.cpp)
-target_link_libraries(natnet_node ${catkin_LIBRARIES})
-add_dependencies(natnet_node natnet_ros_generate_messages_cpp)
+add_executable(
+  natnet_node
+    src/natnet_node.cpp
+)
+target_link_libraries(
+  natnet_node
+    ${catkin_LIBRARIES}
+)
+add_dependencies(
+  natnet_node
+    natnet_ros_generate_messages_cpp
+)
 
-add_executable(natnet_viz_node src/viz_node.cpp)
-target_link_libraries(natnet_viz_node ${catkin_LIBRARIES})
-add_dependencies(natnet_viz_node natnet_ros_generate_messages_cpp)
+add_executable(
+  natnet_viz_node
+    src/viz_node.cpp
+)
+target_link_libraries(
+  natnet_viz_node
+    ${catkin_LIBRARIES}
+)
+add_dependencies(
+  natnet_viz_node
+    natnet_ros_generate_messages_cpp
+)
